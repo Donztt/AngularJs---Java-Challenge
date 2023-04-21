@@ -1,8 +1,8 @@
 ﻿var app = angular.module("todoApp", []);
-
 app.controller(
   "TodoController",
   function ($rootScope, $timeout, $scope, $http) {
+    $scope.serverPath = "http://localhost:8080"
     $scope.todos = [];
 
     getTodos($rootScope, $timeout, $scope, $http, paginationFilter);
@@ -112,7 +112,7 @@ function getTodos($rootScope, $timeout, $scope, $http, filter) {
 
   $http({
     method: "POST",
-    url: "api/Todo/Todos",
+    url: $scope.serverPath + "/api/PaginationPedidos",
     data: data,
   }).then((response) => {
     $timeout(
@@ -120,7 +120,6 @@ function getTodos($rootScope, $timeout, $scope, $http, filter) {
         if (!$scope.$root.$$phase) {
           $scope.$apply(function () {
             $scope.todos = response.data.pages;
-            console.log(response.data);
 
             $rootScope.$broadcast("setPagination", {
               pageNo: paginationFilter.pageNo,

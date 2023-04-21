@@ -20,4 +20,8 @@ public class ProdutoService {
     public ProdutoDTO novoProduto(ProdutoDTO produto) {
         return _produtoRepository.save(produto.toModel()).toDTO();
     }
+
+    public void addProduto(ProdutoDTO produto) {
+        _produtoRepository.save(produto.toModel());
+    }
 }

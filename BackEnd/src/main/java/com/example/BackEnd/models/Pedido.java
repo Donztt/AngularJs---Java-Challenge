@@ -17,16 +17,18 @@ import java.util.Date;
 @AllArgsConstructor
 public class Pedido {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long idProduto;
     private int qtdProduto;
+    private Date createdDate;
 
     public PedidoDTO toDTO(){
         PedidoDTO pedidoDto = new PedidoDTO();
         pedidoDto.setId(this.id);
         pedidoDto.setIdProduto(this.idProduto);
         pedidoDto.setQtdProduto(this.qtdProduto);
+        pedidoDto.setCreatedDate(this.createdDate);
 
         return pedidoDto;
     }
