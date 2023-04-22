@@ -14,6 +14,7 @@ public class PedidoDTO {
     private Long idProduto;
     private int qtdProduto;
     private String produtoName;
+    private String totalValue;
     private Date createdDate;
 
     public Pedido toModel(){

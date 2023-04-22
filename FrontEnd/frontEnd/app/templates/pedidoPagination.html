@@ -3,15 +3,34 @@
         <tr>
             <th scope="col" ng:click="changeSorting('id')">Id </th>
             <th scope="col" ng:click="changeSorting('produtoName')">Produto </th>
-            <th scope="col" ng:click="changeSorting('qtdProduto')">Quantidade </th>
+            <th scope="col" ng:click="changeSorting('qtdProdto')">Quantidade </th>
+            <th scope="col" ng:click="changeSorting('totalValue')">Total </th>
             <th scope="col" ng:click="changeSorting('createdDate')">Data</th>
         </tr>
-        <tr ng-repeat="todo in todos track by $index ">
+        <tr ng-repeat="todo in todos track by $index" ng-click="showPopup(todo)">
             <td>{{todo.id}}</td>
             <td>{{todo.produtoName}}</td>
             <td>{{todo.qtdProduto}}</td>
+            <td>{{todo.totalValue}}</td>
             <td>{{todo.createdDate | date:'MM/dd/yyyy' }}</td>
         </tr>
     </table>
+
+    <!-- Pop-up -->
+    <div class="popup" ng-show="popupVisible">
+        <div class="popup-content">
+            <button type="button" class="btn btn-danger position-fixed top-0 end-0"
+                ng-click="hidePopup()">X</button>
+            <h1>Fechar Conta</h1>
+            <form>
+
+                <h3 class="my-4">Valor Total: {{ selectedItem.totalValue }}</h3>
+                <label>Valor pagamento:</label>
+                <input type="number" class="form-control noscroll" id="qtdProduct" ng-model="paymentValue">
+
+                <button type="button" class="btn btn-primary my-4" ng-click="closeOrder()">Fechar Conta</button>
+            </form>
+        </div>
+    </div>
 </div>
 <pagination></pagination>

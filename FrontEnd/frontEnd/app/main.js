@@ -18,12 +18,43 @@ app.controller(
       };
       $scope.$broadcast("getTodos");
     };
+
+    $scope.closeOrder = function () {
+      let data = {
+        pedidoDto: $scope.selectedItem,
+        paymentValue: $scope.paymentValue,
+      };
+
+      $http({
+        method: "POST",
+        url: $scope.serverPath + "/pedido/ClosePedido",
+        data: data,
+      }).then((response) => {
+        $scope.hidePopup();
+        showFinishOrder("Pagamento Realizado com sucesso! Valor do troco: " +  response.data.resultValue);
+        $scope.paymentValue = "";
+        $scope.$broadcast("getTodos");
+      }).catch((response) => {
+        showAlert(response.data);
+      });
+    };
+
+    $scope.showPopup = function (item) {
+      $scope.selectedItem = item;
+      $scope.popupVisible = true;
+    };
+    $scope.hidePopup = function () {
+      $scope.popupVisible = false;
+    };
   }
 );
 
 app.controller(
   "AddProdutoController",
   function ($rootScope, $timeout, $scope, $http) {
+
+    $scope.price = 1;
+
     $scope.showPopup = function () {
       $scope.popupVisible = true;
     };
@@ -31,6 +62,16 @@ app.controller(
       $scope.popupVisible = false;
     };
     $scope.saveProduto = function () {
+
+      if($scope.name == undefined){
+        showAlert("Selecione um nome para o produto");
+        return;
+      }
+      if($scope.price <= 0){
+        showAlert("Selecione um a valor válido para do produto");
+        return;
+      }
+
       let data = {
         nomeProduto: $scope.name,
         preco: $scope.price,
@@ -44,6 +85,7 @@ app.controller(
         $scope.hidePopup();
         $scope.price = "";
         $scope.name = "";
+        $scope.$broadcast("getTodos");
       });
     };
   }
@@ -59,7 +101,20 @@ app.controller(
       $scope.products = response.data;
     });
     
+    $scope.qtdProduct = 1;
+
     $scope.savePedido = function () {
+
+      console.log($scope.selectedProduct.id );
+      if($scope.selectedProduct.id == undefined){
+        showAlert("Selecione um produto para o pedido");
+        return;
+      }
+      if($scope.qtdProduct <= 0){
+        showAlert("Selecione um a quantidade válida para do pedido");
+        return;
+      }
+
       var data = {
         idProduto: $scope.selectedProduct.id,
         qtdProduto: $scope.qtdProduct,
@@ -73,6 +128,7 @@ app.controller(
         $scope.hidePopup();
         $scope.price = "";
         $scope.name = "";
+        $scope.$broadcast("getTodos");
       });
     }
     $scope.showPopup = function () {
@@ -163,6 +219,40 @@ var paginationFilter = {
   descending: true,
 };
 
+function showAlert(message) {
+  var alertDiv = document.createElement('div');
+  alertDiv.innerHTML = message;
+  alertDiv.style.padding = '10px';
+  alertDiv.style.borderRadius = '5px';
+  alertDiv.style.backgroundColor = 'red';
+  alertDiv.style.color = 'black';
+  alertDiv.style.display = 'flex';
+  alertDiv.style.alignItems = 'center';
+
+  setTimeout(function() {
+    alertDiv.style.display = "none";
+  }, 5000);
+
+  document.body.prepend(alertDiv);
+}
+
+function showFinishOrder(message) {
+  var alertDiv = document.createElement('div');
+  alertDiv.innerHTML = message;
+  alertDiv.style.padding = '10px';
+  alertDiv.style.borderRadius = '5px';
+  alertDiv.style.backgroundColor = 'green';
+  alertDiv.style.color = 'black';
+  alertDiv.style.display = 'flex';
+  alertDiv.style.alignItems = 'center';
+
+  setTimeout(function() {
+    alertDiv.style.display = "none";
+  }, 8000);
+
+  document.body.prepend(alertDiv);
+}
+
 function getTodos($rootScope, $timeout, $scope, $http, filter) {
   //$scope.loading = true;
   var data = {
@@ -182,11 +272,11 @@ function getTodos($rootScope, $timeout, $scope, $http, filter) {
       function () {
         if (!$scope.$root.$$phase) {
           $scope.$apply(function () {
-            $scope.todos = response.data.pages;
+            $scope.todos = response.data.content;
 
             $rootScope.$broadcast("setPagination", {
               pageNo: paginationFilter.pageNo,
-              totalItems: response.data.totalItems,
+              totalItems: response.data.totalElements,
               totalPages: response.data.totalPages,
             });
           });
