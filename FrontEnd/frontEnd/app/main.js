@@ -53,8 +53,6 @@ app.controller(
   "AddProdutoController",
   function ($rootScope, $timeout, $scope, $http) {
 
-    $scope.price = 1;
-
     $scope.showPopup = function () {
       $scope.popupVisible = true;
     };
@@ -273,7 +271,7 @@ function getTodos($rootScope, $timeout, $scope, $http, filter) {
 
             $rootScope.$broadcast("setPagination", {
               pageNo: paginationFilter.pageNo,
-              totalItems: response.data.totalElements,
+              totalItems: response.data.numberOfElements,
               totalPages: response.data.totalPages,
             });
           });

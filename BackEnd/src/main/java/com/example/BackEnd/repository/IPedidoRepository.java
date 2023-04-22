@@ -13,7 +13,8 @@ import java.util.List;
 public interface IPedidoRepository extends JpaRepository<Pedido,Long> {
     @Query("SELECT p.id, p.qtdProduto, pr.nomeProduto, p.createdDate, pr.preco " +
             "FROM Pedido p " +
-            "JOIN Produto pr ON p.idProduto = pr.id ")
+            "JOIN Produto pr ON p.idProduto = pr.id " +
+            "ORDER BY p.id DESC")
     List<Object[]> findAllPedidosWithProdutoName();
 
     @Query("SELECT (p.qtdProduto * pr.preco) AS totalValue " +
