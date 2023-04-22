@@ -1,6 +1,7 @@
 package com.example.BackEnd.repository;
 
 import com.example.BackEnd.models.Pedido;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -15,7 +16,7 @@ public interface IPedidoRepository extends JpaRepository<Pedido,Long> {
             "FROM Pedido p " +
             "JOIN Produto pr ON p.idProduto = pr.id " +
             "ORDER BY p.id DESC")
-    List<Object[]> findAllPedidosWithProdutoName();
+    List<Object[]> findAllPedidosWithProdutoName(Pageable pageable);
 
     @Query("SELECT (p.qtdProduto * pr.preco) AS totalValue " +
             "FROM Pedido p " +

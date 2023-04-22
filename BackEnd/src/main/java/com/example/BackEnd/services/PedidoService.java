@@ -24,7 +24,16 @@ public class PedidoService {
 
     public Page<PedidoDTO> getAllPedidos(PaginationRequestDTO paginationRequestDTO) {
 
-        var pedidos = _pedidoRepository.findAllPedidosWithProdutoName();
+        Pageable pageable;
+
+        if (paginationRequestDTO.descending){
+            pageable = PageRequest.of(paginationRequestDTO.getPageNo() - 1, paginationRequestDTO.getPageSize(),Sort.by(paginationRequestDTO.getSortBy()).descending());
+        }
+        else{
+            pageable = PageRequest.of(paginationRequestDTO.getPageNo() -1, paginationRequestDTO.getPageSize(),Sort.by(paginationRequestDTO.getSortBy()));
+        }
+
+        var pedidos = _pedidoRepository.findAllPedidosWithProdutoName(pageable);
 
         List<PedidoDTO> pedidoDtoList = new ArrayList<>();
         NumberFormat currencyFormater = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -41,16 +50,7 @@ public class PedidoService {
             pedidoDtoList.add(pedidoDto);
         }
 
-        Pageable pageable;
-
-        if (paginationRequestDTO.descending){
-             pageable = PageRequest.of(paginationRequestDTO.getPageNo(), paginationRequestDTO.getPageSize(),Sort.by(paginationRequestDTO.getSortBy()).descending());
-        }
-        else{
-             pageable = PageRequest.of(paginationRequestDTO.getPageNo(), paginationRequestDTO.getPageSize(),Sort.by(paginationRequestDTO.getSortBy()));
-        }
-
-        return new PageImpl<>(pedidoDtoList, pageable, pedidos.size());
+        return new PageImpl(pedidoDtoList, pageable, pedidoDtoList.size());
     }
 
     public PedidoDTO addPedido(PedidoDTO pedido) {
