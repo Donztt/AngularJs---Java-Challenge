@@ -44,10 +44,10 @@ public class PedidoService {
         Pageable pageable;
 
         if (paginationRequestDTO.descending){
-             pageable = PageRequest.of(paginationRequestDTO.pageNo, paginationRequestDTO.pageSize,Sort.by(paginationRequestDTO.sortBy).descending());
+             pageable = PageRequest.of(paginationRequestDTO.getPageNo(), paginationRequestDTO.getPageSize(),Sort.by(paginationRequestDTO.getSortBy()).descending());
         }
         else{
-             pageable = PageRequest.of(paginationRequestDTO.pageNo, paginationRequestDTO.pageSize,Sort.by(paginationRequestDTO.sortBy));
+             pageable = PageRequest.of(paginationRequestDTO.getPageNo(), paginationRequestDTO.getPageSize(),Sort.by(paginationRequestDTO.getSortBy()));
         }
         return new PageImpl<>(pedidoDtoList, pageable, pedidos.size());
     }

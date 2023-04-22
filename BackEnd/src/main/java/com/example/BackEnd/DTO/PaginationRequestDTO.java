@@ -1,9 +1,14 @@
 package com.example.BackEnd.DTO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class PaginationRequestDTO {
 
-    public String sortBy;
-    public int pageNo;
-    public int pageSize;
+    private String sortBy;
+    private int pageNo;
+    private int pageSize;
     public boolean descending;
 }

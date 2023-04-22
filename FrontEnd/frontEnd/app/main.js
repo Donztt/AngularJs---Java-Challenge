@@ -85,7 +85,6 @@ app.controller(
         $scope.hidePopup();
         $scope.price = "";
         $scope.name = "";
-        $scope.$broadcast("getTodos");
       });
     };
   }
@@ -104,8 +103,6 @@ app.controller(
     $scope.qtdProduct = 1;
 
     $scope.savePedido = function () {
-
-      console.log($scope.selectedProduct.id );
       if($scope.selectedProduct.id == undefined){
         showAlert("Selecione um produto para o pedido");
         return;
