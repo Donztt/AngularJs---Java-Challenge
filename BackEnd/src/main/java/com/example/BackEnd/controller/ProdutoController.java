@@ -20,13 +20,13 @@ public class ProdutoController {
 	private ProdutoService _produtoService;
 
 	@GetMapping("/ListProdutos")
-	public List<Produto> listProdutos() {
+	public List<ProdutoDTO> listProdutos() {
 
 		return _produtoService.getAllProdutos();
 	}
 
 	@PostMapping("/AddProduto")
-	public void addProduto(ProdutoDTO produtoDto){
-		_produtoService.addProduto(produtoDto);
+	public ProdutoDTO addProduto(@RequestBody ProdutoDTO produtoDto){
+		return _produtoService.addProduto(produtoDto);
 	}
 }

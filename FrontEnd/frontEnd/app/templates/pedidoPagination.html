@@ -3,8 +3,8 @@
         <tr>
             <th scope="col" ng:click="changeSorting('id')">Id </th>
             <th scope="col" ng:click="changeSorting('produtoName')">Produto </th>
-            <th scope="col" ng:click="changeSorting('qtdProduto')">qtd Produto </th>
-            <th scope="col" ng:click="changeSorting('createdDate')">Created Date </th>
+            <th scope="col" ng:click="changeSorting('qtdProduto')">Quantidade </th>
+            <th scope="col" ng:click="changeSorting('createdDate')">Data</th>
         </tr>
         <tr ng-repeat="todo in todos track by $index ">
             <td>{{todo.id}}</td>

@@ -1,7 +1,6 @@
 package com.example.BackEnd.services;
 
 import com.example.BackEnd.DTO.PedidoDTO;
-import com.example.BackEnd.models.Pedido;
 import com.example.BackEnd.repository.IPedidoRepository;
 import com.example.BackEnd.repository.IProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,9 +19,6 @@ public class PedidoService {
 
     @Autowired
     private IPedidoRepository _pedidoRepository;
-
-    @Autowired
-    private IProdutoRepository _produtoRepository;
 
     public Page<PedidoDTO> getAllPedidos(int numPage, int pageSize) {
         Pageable pageable = PageRequest.of(numPage, pageSize);
@@ -41,7 +38,7 @@ public class PedidoService {
         return new PageImpl<>(pedidoDtoList, pageable, pedidos.size());
     }
 
-    public PedidoDTO novoPedido(PedidoDTO pedido) {
+    public PedidoDTO addPedido(PedidoDTO pedido) {
        return _pedidoRepository.save(pedido.toModel()).toDTO();
     }
 
@@ -49,7 +46,9 @@ public class PedidoService {
         return _pedidoRepository.getById(idPedido).toDTO();
     }
 
-    public void removePedido(PedidoDTO pedidoDto) {
+    public HttpStatus removePedido(PedidoDTO pedidoDto) {
         _pedidoRepository.delete(pedidoDto.toModel());
+
+        return HttpStatus.OK;
     }
 }

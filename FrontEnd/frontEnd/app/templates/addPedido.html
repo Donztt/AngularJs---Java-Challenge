@@ -1,0 +1,35 @@
+﻿<div ng-controller="AddPedidoController">
+    <div class="container">
+        <div class="container">
+            <!-- Botão para abrir o pop-up -->
+            <button type="button" class="btn btn-primary" ng-click="showPopup()">Adicionar Pedido</button>
+
+            <!-- Pop-up -->
+            <div class="popup" ng-show="popupVisible">
+                <div class="popup-content">
+                    <!-- Formulário de cadastro de produtos -->
+                    <button type="button" class="btn btn-danger position-fixed top-0 end-0"
+                        ng-click="hidePopup()">X</button>
+                    <h1>Adicionar Pedido</h1>
+                    <form>
+                        <div class="form-group my-3">
+                            <label>Nome do Produto:</label>
+                            <select class="ml-3" ng-init="selectedProduct = 'Produtos'"
+                                ng-options="item.nomeProduto for item in products" ng-model="selectedProduct"
+                                ng-change=getSelectValue()>
+                            </select>
+                            <ul class="dropdown-menu" uib-dropdown-menu>
+                                <li ng-repeat="item in products">{{ item }}</li>
+                            </ul>
+                        </div>
+                        <div class="form-group my-3 w-30">
+                            <label>Quantidade:</label>
+                            <input type="text" class="form-control" id="qtdProduct" ng-model="qtdProduct">
+                        </div>
+                        <button type="button" class="btn btn-primary" ng-click="savePedido()">Salvar Produto</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

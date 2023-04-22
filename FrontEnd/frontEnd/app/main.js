@@ -2,7 +2,7 @@
 app.controller(
   "TodoController",
   function ($rootScope, $timeout, $scope, $http) {
-    $scope.serverPath = "http://localhost:8080"
+    $scope.serverPath = "http://localhost:8080";
     $scope.todos = [];
 
     getTodos($rootScope, $timeout, $scope, $http, paginationFilter);
@@ -17,6 +17,69 @@ app.controller(
         descending: !paginationFilter.descending,
       };
       $scope.$broadcast("getTodos");
+    };
+  }
+);
+
+app.controller(
+  "AddProdutoController",
+  function ($rootScope, $timeout, $scope, $http) {
+    $scope.showPopup = function () {
+      $scope.popupVisible = true;
+    };
+    $scope.hidePopup = function () {
+      $scope.popupVisible = false;
+    };
+    $scope.saveProduto = function () {
+      let data = {
+        nomeProduto: $scope.name,
+        preco: $scope.price,
+      };
+
+      $http({
+        method: "POST",
+        url: $scope.serverPath + "/produto/AddProduto",
+        data: data,
+      }).then((response) => {
+        $scope.hidePopup();
+        $scope.price = "";
+        $scope.name = "";
+      });
+    };
+  }
+);
+
+app.controller(
+  "AddPedidoController",
+  function ($rootScope, $timeout, $scope, $http) {
+    $http({
+      method: "GET",
+      url: $scope.serverPath + "/produto/ListProdutos",
+    }).then((response) => {
+      $scope.products = response.data;
+    });
+    
+    $scope.savePedido = function () {
+      var data = {
+        idProduto: $scope.selectedProduct.id,
+        qtdProduto: $scope.qtdProduct,
+      }
+
+      $http({
+        method: "POST",
+        url: $scope.serverPath + "/pedido/AddPedido",
+        data: data,
+      }).then((response) => {
+        $scope.hidePopup();
+        $scope.price = "";
+        $scope.name = "";
+      });
+    }
+    $scope.showPopup = function () {
+      $scope.popupVisible = true;
+    };
+    $scope.hidePopup = function () {
+      $scope.popupVisible = false;
     };
   }
 );
@@ -112,7 +175,7 @@ function getTodos($rootScope, $timeout, $scope, $http, filter) {
 
   $http({
     method: "POST",
-    url: $scope.serverPath + "/api/PaginationPedidos",
+    url: $scope.serverPath + "/pedido/PaginationPedidos",
     data: data,
   }).then((response) => {
     $timeout(
@@ -135,10 +198,30 @@ function getTodos($rootScope, $timeout, $scope, $http, filter) {
   });
 }
 
-app.directive("todoPaginatedList", function () {
+app.directive("pedidoPagination", function () {
   var directive = {
     restrict: "E",
-    templateUrl: "app/templates/todo.list.paginated.html",
+    templateUrl: "app/templates/pedidoPagination.html",
+    scope: true,
+  };
+
+  return directive;
+});
+
+app.directive("addProduto", function () {
+  var directive = {
+    restrict: "E",
+    templateUrl: "app/templates/addProduto.html",
+    scope: true,
+  };
+
+  return directive;
+});
+
+app.directive("addPedido", function () {
+  var directive = {
+    restrict: "E",
+    templateUrl: "app/templates/addPedido.html",
     scope: true,
   };
 
@@ -149,6 +232,16 @@ app.directive("pagination", function () {
   var directive = {
     restrict: "E",
     templateUrl: "app/templates/pagination.html",
+    scope: true,
+  };
+
+  return directive;
+});
+
+app.directive("navbar", function () {
+  var directive = {
+    restrict: "E",
+    templateUrl: "app/templates/NavBar.html",
     scope: true,
   };
 
