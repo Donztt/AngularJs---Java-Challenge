@@ -37,14 +37,3 @@ app.controller(
       };
     }
   );
-
-  app.directive("addPedido", function () {
-    var directive = {
-      restrict: "E",
-      templateUrl: "app/templates/addPedido.html",
-      scope: true,
-    };
-  
-    return directive;
-  });
-  

@@ -22,10 +22,10 @@ app.controller("PaginationController", function ($rootScope, $timeout, $scope, $
 
     $scope.todos = [];
   
-    getTodos($rootScope, $timeout, $scope, $http, paginationFilter);
+    getTodos($rootScope, $timeout, $scope, $http, paginationFilter, pedidoFactory);
 
     $scope.$on("getTodos", function (evt) {
-      getTodos($rootScope, $timeout, $scope, $http, paginationFilter);
+      getTodos($rootScope, $timeout, $scope, $http, paginationFilter, pedidoFactory);
     });
     $scope.changeSorting = function (sortBy) {
       paginationFilter = {
@@ -116,26 +116,6 @@ app.controller("PaginationController", function ($rootScope, $timeout, $scope, $
     pageSize: 20,
     descending: true,
   };
-
-  app.directive("pedidoPagination", function () {
-    var directive = {
-      restrict: "E",
-      templateUrl: "app/Pagination/pedidoPagination.html",
-      scope: true,
-    };
-  
-    return directive;
-  });
-
-  app.directive("pagination", function () {
-    var directive = {
-      restrict: "E",
-      templateUrl: "app/Pagination/pagination.html",
-      scope: true,
-    };
-  
-    return directive;
-  });
 
   function getTodos($rootScope, $timeout, $scope, $http, filter, pedidoFactory) {
     //$scope.loading = true;

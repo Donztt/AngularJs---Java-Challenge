@@ -33,13 +33,4 @@ app.controller(
     }
   );
 
-  app.directive("addProduto", function () {
-    var directive = {
-      restrict: "E",
-      templateUrl: "app/templates/addProduto.html",
-      scope: true,
-    };
-  
-    return directive;
-  });
   
