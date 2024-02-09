@@ -66,3 +66,12 @@ app.directive("addProduto", function () {
   return directive;
 });
 
+app.directive("deleteProduto", function () {
+  var directive = {
+    restrict: "E",
+    templateUrl: "app/Produto/deleteProduto.html",
+    scope: true,
+  };
+
+  return directive;
+});
