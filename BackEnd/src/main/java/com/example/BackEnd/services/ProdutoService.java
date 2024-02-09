@@ -27,4 +27,9 @@ public class ProdutoService {
     public ProdutoDTO addProduto(ProdutoDTO produto) {
        return _produtoRepository.save(produto.toModel()).toDTO();
     }
+
+    public void deleteProduto(long id) {
+        Produto produto = _produtoRepository.getById(id);
+         _produtoRepository.delete(produto);
+    }
 }

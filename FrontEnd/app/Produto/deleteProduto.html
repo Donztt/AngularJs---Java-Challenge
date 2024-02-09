@@ -1,8 +1,8 @@
-﻿<div ng-controller="AddPedidoController">
+﻿<div ng-controller="ProdutoController">
     <div class="container">
         <div class="container">
             <!-- Botão para abrir o pop-up -->
-            <button type="button" class="btn btn-primary" ng-click="showPopup()">Adicionar Pedido</button>
+            <button type="button" class="btn btn-primary" ng-click="showPopup()">Deletar Produto</button>
 
             <!-- Pop-up -->
             <div class="popup" ng-show="popupVisible">
@@ -10,7 +10,7 @@
                     <!-- Formulário de cadastro de produtos -->
                     <button type="button" class="btn btn-danger position-fixed top-0 end-0"
                         ng-click="hidePopup()">X</button>
-                    <h1>Adicionar Pedido</h1>
+                    <h1>Deletar Produto</h1>
                     <form>
                         <div class="form-group my-3">
                             <label>Nome do Produto:</label>
@@ -22,11 +22,7 @@
                                 <li ng-repeat="item in products">{{ item }}</li>
                             </ul>
                         </div>
-                        <div class="form-group my-3 w-30">
-                            <label>Quantidade:</label>
-                            <input type="number" placeholder="0" class="form-control noscroll" id="qtdProduct" ng-model="qtdProduct">
-                        </div>
-                        <button type="button" class="btn btn-primary w-100" ng-click="savePedido()">Salvar Produto</button>
+                        <button type="button" class="btn btn-primary w-100" ng-click="deletarProduto()">Deletar Produto</button>
                     </form>
                 </div>
             </div>

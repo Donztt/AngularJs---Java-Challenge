@@ -39,8 +39,6 @@ table tr:nth-child(odd) {
   .popup-content {
     position: absolute;
     background-color: #01061d;
-    width: 50%;
-    height: 30%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

@@ -1,5 +1,6 @@
-app.controller("PaginationController", function ($rootScope, $timeout, $scope, $http, pedidoFactory) {
-    console.log("caiu aqui");
+app.controller(
+  "PaginationController",
+  function ($rootScope, $timeout, $scope, $http, pedidoFactory) {
     $scope.currentPage = paginationFilter.pageNo;
     $scope.pageSize = [
       {
@@ -21,12 +22,31 @@ app.controller("PaginationController", function ($rootScope, $timeout, $scope, $
     ];
 
     $scope.todos = [];
-  
-    getTodos($rootScope, $timeout, $scope, $http, paginationFilter, pedidoFactory);
 
     $scope.$on("getTodos", function (evt) {
-      getTodos($rootScope, $timeout, $scope, $http, paginationFilter, pedidoFactory);
+      var data = {
+        sortBy: paginationFilter.sortBy,
+        pageNo: paginationFilter.pageNo,
+        pageSize: paginationFilter.pageSize,
+        descending: paginationFilter.descending,
+      };
+      data = JSON.stringify(data);
+
+      pedidoFactory.getAllPedidos(data).then((response) => {
+        $timeout(function () {
+          $scope.todos = response.data.content;
+
+          $rootScope.$broadcast("setPagination", {
+            pageNo: paginationFilter.pageNo,
+            totalItems: response.data.numberOfElements,
+            totalPages: response.data.totalPages,
+          });
+        });
+      });
     });
+
+    $scope.$broadcast("getTodos");
+
     $scope.changeSorting = function (sortBy) {
       paginationFilter = {
         ...paginationFilter,
@@ -42,14 +62,20 @@ app.controller("PaginationController", function ($rootScope, $timeout, $scope, $
         paymentValue: $scope.paymentValue,
       };
 
-      pedidoFactory.closeOrder(data).then((response) => {
-        $scope.hidePopup();
-        showFinishOrder("Pagamento Realizado com sucesso! Valor do troco: " +  response.data.resultValue);
-        $scope.paymentValue = "";
-        $scope.$broadcast("getTodos");
-      }).catch((response) => {
-        showAlert(response.data);
-      });
+      pedidoFactory
+        .closeOrder(data)
+        .then((response) => {
+          $scope.hidePopup();
+          showFinishOrder(
+            "Pagamento Realizado com sucesso! Valor do troco: " +
+              response.data.resultValue
+          );
+          $scope.paymentValue = "";
+          $scope.$broadcast("getTodos");
+        })
+        .catch((response) => {
+          showAlert(response.data);
+        });
     };
 
     $scope.showPopup = function (item) {
@@ -59,13 +85,13 @@ app.controller("PaginationController", function ($rootScope, $timeout, $scope, $
     $scope.hidePopup = function () {
       $scope.popupVisible = false;
     };
-  
+
     $scope.$on("setPagination", function (evt, args) {
       $scope.currentPage = args.pageNo;
       $scope.totalItems = args.totalItems;
       $scope.totalPages = args.totalPages;
     });
-  
+
     $scope.nextPage = function () {
       if ($scope.totalPages == paginationFilter.pageNo) {
         return;
@@ -100,7 +126,7 @@ app.controller("PaginationController", function ($rootScope, $timeout, $scope, $
       };
       $rootScope.$broadcast("getTodos");
     };
-  
+
     $scope.getSelectValue = function () {
       paginationFilter = {
         ...paginationFilter,
@@ -108,42 +134,12 @@ app.controller("PaginationController", function ($rootScope, $timeout, $scope, $
       };
       $rootScope.$broadcast("getTodos");
     };
-  });
-  
-  var paginationFilter = {
-    sortBy: "createdDate",
-    pageNo: 1,
-    pageSize: 20,
-    descending: true,
-  };
-
-  function getTodos($rootScope, $timeout, $scope, $http, filter, pedidoFactory) {
-    //$scope.loading = true;
-    var data = {
-      sortBy: filter.sortBy,
-      pageNo: filter.pageNo,
-      pageSize: filter.pageSize,
-      descending: filter.descending,
-    };
-    data = JSON.stringify(data);
-  
-    pedidoFactory.getAllPedidos(data).then((response) => {
-      $timeout(
-        function () {
-          if (!$scope.$root.$$phase) {
-            $scope.$apply(function () {
-              $scope.todos = response.data.content;
-  
-              $rootScope.$broadcast("setPagination", {
-                pageNo: paginationFilter.pageNo,
-                totalItems: response.data.numberOfElements,
-                totalPages: response.data.totalPages,
-              });
-            });
-          }
-        },
-        500,
-        true
-      );
-    });
   }
+);
+
+var paginationFilter = {
+  sortBy: "createdDate",
+  pageNo: 1,
+  pageSize: 20,
+  descending: true,
+};

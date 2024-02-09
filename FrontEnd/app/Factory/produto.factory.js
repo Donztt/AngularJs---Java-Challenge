@@ -7,6 +7,12 @@ app.factory("produtoFactory", function ($http, SERVER_PATH) {
         data: params,
       });
     },
+    deleteProduto: function (id) {
+      return $http({
+        method: "DELETE",
+        url: SERVER_PATH + "/produto/DeleteProduto/"+ id,
+      });
+    },
     getAllProdutos: function (params) {
       return $http({
         method: "GET",
